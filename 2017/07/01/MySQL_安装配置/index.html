@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>MySQL_安装配置 | Do what you want, be what you want.</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">MySQL_安装配置</h1><a id="logo" href="/.">Do what you want, be what you want.</a><p class="description">在喧嚣的闹市中保持一颗宁静的心</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/books/"><i class="fa fa-user"> books</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">MySQL_安装配置</h1><div class="post-meta"><a href="/2017/07/01/MySQL_安装配置/#comments" class="comment-count"><a id="uyan_count_unit" href="/2017/07/01/MySQL_安装配置/"></a>留言</a><p><span class="date">Jul 01, 2017</span><span><a href="/categories/MySQL/" class="category">MySQL</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h1 id="MySQL安装"><a href="#MySQL安装" class="headerlink" title="MySQL安装"></a>MySQL安装</h1><a id="more"></a>
+<h2 id="1-LINUX安装"><a href="#1-LINUX安装" class="headerlink" title="1.LINUX安装"></a>1.LINUX安装</h2><ol>
+<li><p>卸载已经安装的库</p>
+<p> rpm -qa|grep -i mysql </p>
+<p> PS: -i 表示匹配时忽略大小写</p>
+</li>
+<li><p>添加用户组和系统用户</p>
+<p> groupadd mysql</p>
+<p> useradd -r -g mysql mysql</p>
+<p> PS: -r 表示mysql用户是系统用户，不可用于登录系统</p>
+</li>
+<li><p>解压和修改权限</p>
+<p> tar zxvf  mysql-5.6.12-linux-glibc2.5-x86_64.tar.gz -C /mysql</p>
+<p> chown -R mysql .</p>
+<p> chgrp -R mysql .</p>
+</li>
+<li><p>装库</p>
+<p> scripts/mysql_install_db –user=mysql –basedir=/mysql –datadir=/mysql/data</p>
+<p> chown -R root .</p>
+<p> chown -R mysql data</p>
+<p> PS:将mysql/目录下除了data/目录的所有文件，改回root用户所有，mysql用户只需作为mysql/data/目录下所有文件的所有者</p>
+</li>
+<li><p>配置服务</p>
+<p> cp my.cnf  /etc/my.cnf</p>
+<p> <em>按需修改配置项</em></p>
+<p> cp support-files/mysql.server /etc/init.d/mysqld</p>
+<p> <em>通过chkconfig命令将mysqld服务加入到自启动服务项中</em></p>
+<p> chkconfig –add mysqld</p>
+</li>
+<li><p>验证</p>
+<p> chkconfig –list mysqld</p>
+<p> netstat -tnlp | grep 3306</p>
+<p> ps aux | grep mysqld</p>
+</li>
+</ol>
+<h2 id="2-WINDOS安装"><a href="#2-WINDOS安装" class="headerlink" title="2.WINDOS安装"></a>2.WINDOS安装</h2><p>1 配置信息</p>
+<pre><code>重命名my-small.ini为my.ini
+</code></pre><p>2.修改配置信息my.ini</p>
+<pre><code>basedir=install_dir
+
+basedir=install_dir\data  
+</code></pre><p>3.安装mysql(admin启动CMD)</p>
+<pre><code>mysqld --initialize *(V5.7)*
+
+mysqld --install &quot;MySQL&quot; --defaults-file=install_dir\my.ini
+
+mysqld --remove &quot;mysqld&quot; 
+</code></pre><ol>
+<li><p>配置客户端变量</p>
+<p> 将bin加入PATH变量</p>
+</li>
+</ol>
+<h2 id="3-配置"><a href="#3-配置" class="headerlink" title="3.配置"></a>3.配置</h2><ol>
+<li>基本配置</li>
+</ol>
+<ul>
+<li>innodb_buffer_pool_size = 16G</li>
+<li>basedir = G:\mysql3307</li>
+<li>datadir = G:\mysql3307\data</li>
+<li>socket = /tmp/mysql.sock</li>
+<li><p>port =3306</p>
+</li>
+<li><p>character-set-server=utf8</p>
+</li>
+<li>skip-name-resolve</li>
+<li>lower_case_table_names=1</li>
+</ul>
+<p>lower_case_table_names： 此参数不可以动态修改，必须重启数据库<br>lower_case_table_names = 1  表名存储在磁盘是小写的，但是比较的时候是不区分大小写<br>lower_case_table_names=0  表名存储为给定的大小和比较是区分大小写的<br>lower_case_table_names=2, 表名存储为给定的大小写但是比较的时候是小写的</p>
+<ul>
+<li>open-files-limit=65535</li>
+<li>max_connections=2000</li>
+</ul>
+<ol>
+<li>日志与MASTER</li>
+</ol>
+<ul>
+<li>log_bin=G:/mysqlbinlog/binlog</li>
+<li><p>server_id = 107</p>
+</li>
+<li><p>slow_query_log=1</p>
+</li>
+<li><p>slow_query_log_file=/mysql/mysql-5.6.12-linux-glibc2.5-x86_64/data/slow-query.log</p>
+</li>
+<li><p>long_query_time=10</p>
+</li>
+<li>log_output=table</li>
+<li>slow_launch_time=2</li>
+<li>expire_logs_days = 10</li>
+</ul>
+<ol>
+<li>InnoDB配置</li>
+</ol>
+<ul>
+<li>innodb_buffer_pool_size=80G</li>
+<li>innodb_flush_log_at_trx_commit=1</li>
+<li>sync_binlog=1</li>
+<li>innodb_log_file_size=4G</li>
+<li>innodb_log_buffer_size=48M</li>
+<li>back_log=500</li>
+<li>innodb_fast_shutdown=1</li>
+<li>innodb_buffer_pool_instances=3</li>
+<li>innodb_max_dirty_pages_pct=20</li>
+<li>innodb_write_io_threads=30</li>
+<li>innodb_io_capacity=400</li>
+<li>binlog_cache_size=65000</li>
+</ul>
+<ol>
+<li>SALVE配置</li>
+</ol>
+<ul>
+<li>read-only</li>
+<li>log_slave_updates=1</li>
+<li>replicate-do-db=xlcloud</li>
+<li>replicate_wild_ignore_table=xlcloud.electricts%</li>
+<li>replicate_ignore_table=xlcloud.SmartTaskDevice</li>
+</ul>
+<h2 id="4-批量建库、建表、删库"><a href="#4-批量建库、建表、删库" class="headerlink" title="4. 批量建库、建表、删库"></a>4. 批量建库、建表、删库</h2><ol>
+<li>批量建库</li>
+</ol>
+<p>1.1 脚本</p>
+<ul>
+<li>windows环境</li>
+</ul>
+<p>for /L %i in (1,1,3) do mysqladmin -u root create xlcloud%i CHARACTER SET utf8 COLLATE utf8_general_ci ;</p>
+<ul>
+<li>linux环境</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">for((i=1;i&lt;3;i++));</div><div class="line">do</div><div class="line">    mysqladmin -u root create xlcloud$i CHARACTER SET utf8 COLLATE utf8_general_ci;</div><div class="line">done</div></pre></td></tr></table></figure>
+<p>缺点：命令因为环境不同，建立的数据库字符集有区别，windows默认是utf8，而linux是latin1</p>
+<p>1.2 存储过程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">DELIMITER $$</div><div class="line"></div><div class="line">USE `xlcloud20160324`$$</div><div class="line"></div><div class="line">DROP PROCEDURE IF EXISTS `myproc`$$</div><div class="line"></div><div class="line">CREATE DEFINER = `xluser` @`%` PROCEDURE `myproc` () </div><div class="line">BEGIN</div><div class="line">  DECLARE i INT ;</div><div class="line">  DECLARE pri CHAR(10) ;</div><div class="line">  DECLARE nm CHAR(10) ;</div><div class="line">  DECLARE v_sql VARCHAR(1000);</div><div class="line">  SET i = 100 ;</div><div class="line">  SET pri = &apos;xlcloud&apos; ;</div><div class="line">  WHILE</div><div class="line">    i &lt; 150 DO SET nm = CONCAT(pri, i) ;</div><div class="line">    SET v_sql =CONCAT(&apos;create database &apos;,nm,&apos; character set utf8 COLLATE utf8_general_ci&apos;);</div><div class="line">    SET i = i + 1 ;</div><div class="line">    SET @v_sql = v_sql ;</div><div class="line">    PREPARE stmt FROM @v_sql ;</div><div class="line">    EXECUTE stmt ;</div><div class="line">    DEALLOCATE PREPARE stmt ;</div><div class="line">  END WHILE ;</div><div class="line">END $$</div><div class="line"></div><div class="line">DELIMITER ;</div></pre></td></tr></table></figure>
+<p>存储过程结果在不同平台下一致，因此采用这种方式</p>
+<ol>
+<li><p>批量建表</p>
+<p> for i in  <code>seq 100 199</code>;do mysql -u root -D xlcloud$i &lt; /home/electricts164.sql;done</p>
+</li>
+<li><p>批量删除数据库</p>
+<p> for i in  <code>seq 101 199</code>;do mysqladmin -uroot -f -S/mysql/data/mysql3306.sock drop  xlcloud$i;done</p>
+</li>
+</ol>
+</div><div class="tags"><a href="/tags/MySQL/">MySQL</a></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/07/02/MySQL_备份恢复/" class="pre">MySQL_备份恢复</a><a href="/2017/06/01/Reshape包的使用思想/" class="next">Reshape包的使用思想</a></div><div id="comments"><div id="uyan_frame"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL安装"><span class="toc-text">MySQL安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-LINUX安装"><span class="toc-text">1.LINUX安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-WINDOS安装"><span class="toc-text">2.WINDOS安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-配置"><span class="toc-text">3.配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-批量建库、建表、删库"><span class="toc-text">4. 批量建库、建表、删库</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/MYSQL_分区/">MySQL_分区</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/04/MySQL_权限/">MySQL_权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/03/MySQL_主从配置/">MySQL_主从复制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/02/MySQL_备份恢复/">MySQL_备份恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/MySQL_安装配置/">MySQL_安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/Reshape包的使用思想/">Reshape包的使用思想</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/数据整理/">数据整理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/01/JAVA的ConcurrentHashMap/">JAVA的ConcurrentHashMap使用</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">2</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/并发/" style="font-size: 15px;">并发</a> <a href="/tags/数据清洗/" style="font-size: 15px;">数据清洗</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="https://github.com/chaooo/hexo-theme-BlueLake" title="关于主题" target="_blank">关于主题</a><ul></ul><a href="http://chaoo.oschina.io/" title="参考设置" target="_blank">参考设置</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">zhilu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?7abd74b67f174e6735b808b6a052fd74";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();
+</script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script><script src="http://v2.uyan.cc/code/uyan.js?uid=2143547"></script></body></html>
